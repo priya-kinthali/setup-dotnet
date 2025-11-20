@@ -126,13 +126,13 @@ jobs:
       - name: Clear toolcache
         shell: pwsh
         run: __tests__/clear-toolcache.ps1 ${{ runner.os }}
-      - name: Setup dotnet '8.0.100-preview.1.23115.2'
+      - name: Setup dotnet '10.0.100-preview.1.25120.13'
         uses: ./
         with:
-          dotnet-version: '8.0.100-preview.1.23115.2'
+          dotnet-version: '10.0.100-preview.1.25120.13'
       - name: Verify dotnet
         shell: pwsh
-        run: __tests__/verify-dotnet.ps1 -Patterns "8.0.100-preview.1.23115.2"
+        run: __tests__/verify-dotnet.ps1 -Patterns "10.0.100-preview.1.25120.13"
   test-setup-latest-patch-version:
     runs-on: ${{ matrix.operating-system }}
     strategy:
@@ -481,13 +481,13 @@ jobs:
         id: step2
         with:
           dotnet-version: |
-            8.0.402
             9.0.301
+            8.0.402
 
       - name: Verify value of the dotnet-version output
         shell: pwsh
         run: |
-          $version = "8.0.402"
+          $version = "9.0.301"
           if (-not ($version -eq '${{steps.step2.outputs.dotnet-version}}')) { throw "Unexpected output value" }
 
   test-proxy:
