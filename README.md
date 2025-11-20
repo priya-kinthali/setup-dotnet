@@ -53,7 +53,7 @@ steps:
 
 The `dotnet-version` input supports following syntax:
 
-- **A.B.C** (e.g 6.0.400, 7.0.100-preview.7.22377.5) - installs exact version of .NET SDK
+- **A.B.C** (e.g 9.0.308, 10.0.100-preview.1.25120.13) - installs exact version of .NET SDK
 - **A.B** or **A.B.x** (e.g. 8.0, 8.0.x) - installs the latest patch version of .NET SDK on the channel `8.0`, including prerelease versions (preview, rc)
 - **A** or **A.x** (e.g. 8, 8.x) - installs the latest minor version of the specified major tag, including prerelease versions (preview, rc)
 - **A.B.Cxx** (e.g. 8.0.4xx) - available since `.NET 5.0` release. Installs the latest version of the specific SDK release, including prerelease versions (preview, rc). 
@@ -154,7 +154,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet: [ '7.0.x', '8.0.x', '9.0.x' ]
+        dotnet: [ '8.0.x', '9.0.x', '10.0.x' ]
     name: Dotnet ${{ matrix.dotnet }} sample
     steps:
       - uses: actions/checkout@v5
@@ -174,7 +174,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dotnet: [ '7.0.x', '8.0.x', '9.0.x' ]
+        dotnet: [ '8.0.x', '9.0.x', '10.0.x' ]
     name: Dotnet ${{ matrix.dotnet }} sample
     steps:
       - uses: actions/checkout@v5
@@ -246,8 +246,8 @@ In case of a single version installation, the `dotnet-version` output contains t
     - uses: actions/setup-dotnet@v5
       id: stepid
       with:
-        dotnet-version: 8.0.402
-    - run: echo '${{ steps.stepid.outputs.dotnet-version }}' # outputs 8.0.402
+        dotnet-version: 8.0.416
+    - run: echo '${{ steps.stepid.outputs.dotnet-version }}' # outputs 8.0.416
 ```
 
 **Multiple version installation**
@@ -259,9 +259,9 @@ In case of a multiple version installation, the `dotnet-version` output contains
       id: stepid
       with:
         dotnet-version: | 
-          8.0.402
-          9.0.301
-    - run: echo '${{ steps.stepid.outputs.dotnet-version }}' # outputs 9.0.301
+          8.0.416
+          9.0.308
+    - run: echo '${{ steps.stepid.outputs.dotnet-version }}' # outputs 9.0.308
 ```
 **Installation from global.json**
 
@@ -272,8 +272,8 @@ When the `dotnet-version` input is used along with the `global-json-file` input,
       id: stepid
       with:
         dotnet-version: | 
-          8.0.402
-          9.0.301
+          8.0.416
+          9.0.308
         global-json-file: "./global.json" # contains version 7.0.410
     - run: echo '${{ steps.stepid.outputs.dotnet-version }}' # outputs 7.0.410
 ```
