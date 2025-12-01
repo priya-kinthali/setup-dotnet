@@ -188,6 +188,7 @@ jobs:
       - name: Execute dotnet
         run: dotnet build <my project>
 ```
+>**Note**: For Windows self-hosted runners, ensure commands generating global.json are executed with PowerShell Core (pwsh) or Bash to avoid formatting issues that may lead to .NET command failures.
 ## Setting up authentication for nuget feeds
 
 ### Github Package Registry (GPR)
