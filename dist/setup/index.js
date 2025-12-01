@@ -100484,6 +100484,7 @@ const hc = __importStar(__nccwpck_require__(6255));
 const fs_1 = __nccwpck_require__(7147);
 const path_1 = __importDefault(__nccwpck_require__(1017));
 const os_1 = __importDefault(__nccwpck_require__(2037));
+const fs = __importStar(__nccwpck_require__(7147));
 const semver_1 = __importDefault(__nccwpck_require__(1383));
 const utils_1 = __nccwpck_require__(1314);
 const QUALITY_INPUT_MINIMAL_MAJOR_TAG = 6;
@@ -100643,9 +100644,35 @@ class DotnetInstallScript {
     }
 }
 exports.DotnetInstallScript = DotnetInstallScript;
+function getDotnetInstallDir() {
+    const defaultDir = '/usr/share/dotnet';
+    try {
+        // If directory exists, check write permissions by writing in it.
+        // If not present, check if parent dir is writable for creating it.
+        const testDir = fs.existsSync(defaultDir)
+            ? defaultDir
+            : path_1.default.dirname(defaultDir);
+        core.info(`[getDotnetInstallDir] Checking write access for: ${testDir}`);
+        fs.accessSync(testDir, fs.constants.W_OK);
+        core.info(`[getDotnetInstallDir] Write access confirmed for: ${testDir}`);
+        // If no error, we have permission.
+        return defaultDir;
+    }
+    catch (error) {
+        core.info(`[getDotnetInstallDir] No write access to defaultDir. Error: ${error}`);
+        // Fallback: use $HOME/.dotnet if present, otherwise <runner.temp>/.dotnet.
+        if (process.env.HOME) {
+            core.info(`[getDotnetInstallDir] Using $HOME/.dotnet: ${path_1.default.join(process.env.HOME, '.dotnet')}`);
+            return path_1.default.join(process.env.HOME, '.dotnet');
+        }
+        // Fallback to runner temp or os.tmpdir()
+        core.info(`[getDotnetInstallDir] Using fallback dir: ${path_1.default.join(process.env['RUNNER_TEMP'] || os_1.default.tmpdir(), '.dotnet')}`);
+        return path_1.default.join(process.env['RUNNER_TEMP'] || os_1.default.tmpdir(), '.dotnet');
+    }
+}
 class DotnetInstallDir {
     static default = {
-        linux: '/usr/share/dotnet',
+        linux: getDotnetInstallDir(),
         mac: path_1.default.join(process.env['HOME'] + '', '.dotnet'),
         windows: path_1.default.join(process.env['PROGRAMFILES'] + '', 'dotnet')
     };

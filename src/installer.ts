@@ -6,6 +6,7 @@ import * as hc from '@actions/http-client';
 import {chmodSync} from 'fs';
 import path from 'path';
 import os from 'os';
+import * as fs from 'fs';
 import semver from 'semver';
 import {IS_WINDOWS, PLATFORM} from './utils';
 import {QualityOptions} from './setup-dotnet';
@@ -217,9 +218,41 @@ export class DotnetInstallScript {
   }
 }
 
+function getDotnetInstallDir(): string {
+  const defaultDir = '/usr/share/dotnet';
+
+  try {
+    // If directory exists, check write permissions by writing in it.
+    // If not present, check if parent dir is writable for creating it.
+    const testDir = fs.existsSync(defaultDir)
+      ? defaultDir
+      : path.dirname(defaultDir);
+    core.info(`[getDotnetInstallDir] Checking write access for: ${testDir}`);
+    fs.accessSync(testDir, fs.constants.W_OK);
+    core.info(`[getDotnetInstallDir] Write access confirmed for: ${testDir}`);
+    // If no error, we have permission.
+    return defaultDir;
+  } catch (error) {
+    core.info(
+      `[getDotnetInstallDir] No write access to defaultDir. Error: ${error}`
+    );
+    // Fallback: use $HOME/.dotnet if present, otherwise <runner.temp>/.dotnet.
+    if (process.env.HOME) {
+      core.info(
+        `[getDotnetInstallDir] Using $HOME/.dotnet: ${path.join(process.env.HOME, '.dotnet')}`
+      );
+      return path.join(process.env.HOME, '.dotnet');
+    }
+    // Fallback to runner temp or os.tmpdir()
+    core.info(
+      `[getDotnetInstallDir] Using fallback dir: ${path.join(process.env['RUNNER_TEMP'] || os.tmpdir(), '.dotnet')}`
+    );
+    return path.join(process.env['RUNNER_TEMP'] || os.tmpdir(), '.dotnet');
+  }
+}
 export abstract class DotnetInstallDir {
   private static readonly default = {
-    linux: '/usr/share/dotnet',
+    linux: getDotnetInstallDir(),
     mac: path.join(process.env['HOME'] + '', '.dotnet'),
     windows: path.join(process.env['PROGRAMFILES'] + '', 'dotnet')
   };
