@@ -273,10 +273,10 @@ When the `dotnet-version` input is used along with the `global-json-file` input,
       id: stepid
       with:
         dotnet-version: | 
-          8.0.416
           9.0.308
-        global-json-file: "./global.json" # contains version 7.0.410
-    - run: echo '${{ steps.stepid.outputs.dotnet-version }}' # outputs 7.0.410
+          10.0.100
+        global-json-file: "./global.json" # contains version 8.0.416
+    - run: echo '${{ steps.stepid.outputs.dotnet-version }}' # outputs 8.0.416
 ```
 
 ### `cache-hit`
