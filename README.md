@@ -29,7 +29,7 @@ See [action.yml](action.yml)
 **Basic**:
 ```yaml
 steps:
-- uses: actions/checkout@v5
+- uses: actions/checkout@v6
 - uses: actions/setup-dotnet@v5
   with:
     dotnet-version: '8.0.x'
@@ -40,7 +40,7 @@ steps:
 **Multiple version installation**:
 ```yml
 steps:
-- uses: actions/checkout@v5
+- uses: actions/checkout@v6
 - name: Setup dotnet
   uses: actions/setup-dotnet@v5
   with:
@@ -66,7 +66,7 @@ This input sets up the action to install the latest build of the specified quali
 
 ```yml
 steps:
-- uses: actions/checkout@v5
+- uses: actions/checkout@v6
 - uses: actions/setup-dotnet@v5
   with:
     dotnet-version: '8.0.x'
@@ -81,7 +81,7 @@ steps:
 
 ```yml
 steps:
-- uses: actions/checkout@v5
+- uses: actions/checkout@v6
 - uses: actions/setup-dotnet@v5
   with:
     global-json-file: csharp/global.json
@@ -98,7 +98,7 @@ The action searches for [NuGet Lock files](https://learn.microsoft.com/nuget/con
 
 ```yaml
 steps:
-- uses: actions/checkout@v5
+- uses: actions/checkout@v6
 - uses: actions/setup-dotnet@v5
   with:
     dotnet-version: 8.x
@@ -123,7 +123,7 @@ steps:
 env:
   NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
 steps:
-- uses: actions/checkout@v5
+- uses: actions/checkout@v6
 - uses: actions/setup-dotnet@v5
   with:
     dotnet-version: 8.x
@@ -137,7 +137,7 @@ steps:
 env:
   NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
 steps:
-- uses: actions/checkout@v5
+- uses: actions/checkout@v6
 - uses: actions/setup-dotnet@v5
   with:
     dotnet-version: 8.x
@@ -157,7 +157,7 @@ jobs:
         dotnet: [ '8.0.x', '9.0.x', '10.0.x' ]
     name: Dotnet ${{ matrix.dotnet }} sample
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Setup dotnet
         uses: actions/setup-dotnet@v5
         with:
@@ -177,7 +177,7 @@ jobs:
         dotnet: [ '8.0.x', '9.0.x', '10.0.x' ]
     name: Dotnet ${{ matrix.dotnet }} sample
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Setup dotnet
         uses: actions/setup-dotnet@v5
         id: stepid
@@ -194,7 +194,7 @@ jobs:
 ### Github Package Registry (GPR)
 ```yml
 steps:
-- uses: actions/checkout@v5
+- uses: actions/checkout@v6
 - uses: actions/setup-dotnet@v5
   with:
     dotnet-version: '8.0.x'
@@ -309,7 +309,7 @@ build:
     DOTNET_INSTALL_DIR: "path/to/directory"
     NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
   steps:
-    - uses: actions/checkout@main
+    - uses: actions/checkout@v6
     - uses: actions/setup-dotnet@v5
       with:
         dotnet-version: '8.0.x'
