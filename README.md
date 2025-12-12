@@ -314,18 +314,13 @@ build:
         dotnet-version: '8.0.x'
         cache: true
 ```
-> **Note**: On some self-hosted or large Linux runners, installing .NET under the default `/usr/share/dotnet` location may fail due to insufficient permissions. To ensure successful installation, set `DOTNET_INSTALL_DIR` to a user-writable path such as `$HOME/.dotnet` or `${{ runner.temp }}/.dotnet`.
+You can also set `DOTNET_INSTALL_DIR` to a value based on runtime variables, such as `$HOME/.dotnet` or `${{ runner.temp }}/.dotnet` before the `setup-dotnet` step:
 
 ```yml
-steps:
-  - uses: actions/checkout@v5
   - name: Set DOTNET_INSTALL_DIR
-    run: echo "DOTNET_INSTALL_DIR=path/to/directory" >> $GITHUB_ENV
-  - name: Setup dotnet
-    uses: actions/setup-dotnet@v5
-    with:
-      dotnet-version: '10.0.x'
+    run: echo "DOTNET_INSTALL_DIR=$HOME/.dotnet" >> $GITHUB_ENV
 ```
+> **Note**: On some self-hosted or large Linux runners, installing .NET under the default `/usr/share/dotnet` location may fail due to insufficient permissions. To ensure successful installation, set `DOTNET_INSTALL_DIR` to a user-writable path.
 
 ## Recommended permissions
 
