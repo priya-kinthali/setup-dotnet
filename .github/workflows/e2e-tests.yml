@@ -15,7 +15,7 @@ jobs:
   test-proxy:
     runs-on: ubuntu-22.04
     container:
-      image: ubuntu:24.04
+      image: mcr.microsoft.com/devcontainers/dotnet:latest
       options: --dns 127.0.0.1
     services:
       squid-proxy:
@@ -36,8 +36,8 @@ jobs:
           else
             echo "PowerShell is NOT installed"
           fi
-      - name: Install curl
-        run: apt-get update && apt-get install -y curl
+      # - name: Install curl
+      #   run: apt-get update && apt-get install -y curl
       # - name: Install Powershell
       #   run: |
       #     apt-get update
