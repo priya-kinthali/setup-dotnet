@@ -54917,7 +54917,6 @@ exports.DotnetInstallDir = DotnetInstallDir;
 function normalizeArch(arch) {
     switch (arch.toLowerCase()) {
         case 'amd64':
-        case 'x64':
             return 'x64';
         default:
             return arch.toLowerCase();
