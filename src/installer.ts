@@ -260,7 +260,7 @@ export abstract class DotnetInstallDir {
   }
 }
 
-function normalizeArch(arch: string): string {
+export function normalizeArch(arch: string): string {
   switch (arch.toLowerCase()) {
     case 'amd64':
       return 'x64';

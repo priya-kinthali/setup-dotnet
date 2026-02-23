@@ -54714,6 +54714,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DotnetCoreInstaller = exports.DotnetInstallDir = exports.DotnetInstallScript = exports.DotnetVersionResolver = void 0;
+exports.normalizeArch = normalizeArch;
 // Load tempDirectory before it gets wiped by tool-cache
 const core = __importStar(__nccwpck_require__(42186));
 const exec = __importStar(__nccwpck_require__(71514));
@@ -55119,7 +55120,7 @@ async function run() {
                 installedDotnetVersions.push(installedVersion);
             }
             if (architecture &&
-                architecture.toLowerCase() !== os_1.default.arch().toLowerCase()) {
+                (0, installer_1.normalizeArch)(architecture) !== (0, installer_1.normalizeArch)(os_1.default.arch())) {
                 const crossArchDir = path_1.default.join(installer_1.DotnetInstallDir.dirPath, architecture);
                 core.addPath(crossArchDir);
                 core.exportVariable('DOTNET_ROOT', crossArchDir);

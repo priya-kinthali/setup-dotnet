@@ -1,6 +1,10 @@
 import * as core from '@actions/core';
 import * as exec from '@actions/exec';
-import {DotnetCoreInstaller, DotnetInstallDir} from './installer';
+import {
+  DotnetCoreInstaller,
+  DotnetInstallDir,
+  normalizeArch
+} from './installer';
 import * as fs from 'fs';
 import path from 'path';
 import semver from 'semver';
@@ -93,7 +97,7 @@ export async function run() {
       }
       if (
         architecture &&
-        architecture.toLowerCase() !== os.arch().toLowerCase()
+        normalizeArch(architecture) !== normalizeArch(os.arch())
       ) {
         const crossArchDir = path.join(DotnetInstallDir.dirPath, architecture);
         core.addPath(crossArchDir);
