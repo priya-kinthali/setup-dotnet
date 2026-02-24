@@ -250,19 +250,13 @@ export abstract class DotnetInstallDir {
     return path.normalize(transformedPath);
   }
 
-  public static addToPath(arch?: string) {
+  public static addToPath() {
     core.addPath(process.env['DOTNET_INSTALL_DIR']!);
     core.exportVariable('DOTNET_ROOT', process.env['DOTNET_INSTALL_DIR']);
-    if (arch) {
-      core.info('inside addpath method with arch');
-      core.exportVariable(
-        'DOTNET_INSTALL_DIR',
-        process.env['DOTNET_INSTALL_DIR']
-      );
-      core.info(
-        `from setup-dotnet file after addpath Dotnet_Root: ${process.env['DOTNET_INSTALL_DIR']}`
-      );
-    }
+    core.exportVariable(
+      'DOTNET_INSTALL_DIR',
+      process.env['DOTNET_INSTALL_DIR']
+    );
   }
 
   public static setEnvironmentVariable() {

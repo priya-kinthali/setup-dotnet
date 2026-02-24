@@ -110,7 +110,7 @@ export async function run() {
           `from setup-dotnet file inside if Dotnet_Root: ${process.env['DOTNET_ROOT']}`
         );
       }
-      DotnetInstallDir.addToPath(architecture);
+      DotnetInstallDir.addToPath();
       core.info(
         `from setup-dotnet file after addpath process.env['DOTNET_INSTALL_DIR']: ${process.env['DOTNET_INSTALL_DIR']}`
       );

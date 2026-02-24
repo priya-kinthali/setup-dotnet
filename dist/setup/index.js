@@ -54906,14 +54906,10 @@ class DotnetInstallDir {
             : path_1.default.join(process.cwd(), installDir);
         return path_1.default.normalize(transformedPath);
     }
-    static addToPath(arch) {
+    static addToPath() {
         core.addPath(process.env['DOTNET_INSTALL_DIR']);
         core.exportVariable('DOTNET_ROOT', process.env['DOTNET_INSTALL_DIR']);
-        if (arch) {
-            core.info('inside addpath method with arch');
-            core.exportVariable('DOTNET_INSTALL_DIR', process.env['DOTNET_INSTALL_DIR']);
-            core.info(`from setup-dotnet file after addpath Dotnet_Root: ${process.env['DOTNET_INSTALL_DIR']}`);
-        }
+        core.exportVariable('DOTNET_INSTALL_DIR', process.env['DOTNET_INSTALL_DIR']);
     }
     static setEnvironmentVariable() {
         process.env['DOTNET_INSTALL_DIR'] = DotnetInstallDir.dirPath;
@@ -55130,7 +55126,7 @@ async function run() {
                 core.info(`process.env['from setup-dotnet file inside if DOTNET_INSTALL_DIR']: ${process.env['DOTNET_INSTALL_DIR']}`);
                 core.info(`from setup-dotnet file inside if Dotnet_Root: ${process.env['DOTNET_ROOT']}`);
             }
-            installer_1.DotnetInstallDir.addToPath(architecture);
+            installer_1.DotnetInstallDir.addToPath();
             core.info(`from setup-dotnet file after addpath process.env['DOTNET_INSTALL_DIR']: ${process.env['DOTNET_INSTALL_DIR']}`);
             core.info(`from setup-dotnet file after addpath Dotnet_Root: ${process.env['DOTNET_ROOT']}`);
             const workloadsInput = core.getInput('workloads');
