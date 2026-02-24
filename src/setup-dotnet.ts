@@ -110,12 +110,12 @@ export async function run() {
           `from setup-dotnet file inside if Dotnet_Root: ${process.env['DOTNET_ROOT']}`
         );
       }
-      DotnetInstallDir.addToPath();
+      DotnetInstallDir.addToPath(architecture);
       core.info(
-        `from setup-dotnet file process.env['DOTNET_INSTALL_DIR']: ${process.env['DOTNET_INSTALL_DIR']}`
+        `from setup-dotnet file after addpath process.env['DOTNET_INSTALL_DIR']: ${process.env['DOTNET_INSTALL_DIR']}`
       );
       core.info(
-        `from setup-dotnet file Dotnet_Root: ${process.env['DOTNET_ROOT']}`
+        `from setup-dotnet file after addpath Dotnet_Root: ${process.env['DOTNET_ROOT']}`
       );
 
       const workloadsInput = core.getInput('workloads');
