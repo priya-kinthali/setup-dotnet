@@ -99,20 +99,24 @@ export async function run() {
         architecture &&
         normalizeArch(architecture) !== normalizeArch(os.arch())
       ) {
-        const crossArchDir = path.join(DotnetInstallDir.dirPath, architecture);
-        core.addPath(crossArchDir);
-        core.exportVariable('DOTNET_ROOT', crossArchDir);
-        core.info(
-          `process.env['if DOTNET_INSTALL_DIR']: ${process.env['DOTNET_INSTALL_DIR']}`
+        process.env['DOTNET_INSTALL_DIR'] = path.join(
+          DotnetInstallDir.dirPath,
+          architecture
         );
-        core.info(`if Dotnet_Root: ${process.env['DOTNET_ROOT']}`);
-      } else {
-        DotnetInstallDir.addToPath();
         core.info(
-          `else process.env['DOTNET_INSTALL_DIR']: ${process.env['DOTNET_INSTALL_DIR']}`
+          `process.env['from setup-dotnet file inside if DOTNET_INSTALL_DIR']: ${process.env['DOTNET_INSTALL_DIR']}`
         );
-        core.info(`else Dotnet_Root: ${process.env['DOTNET_ROOT']}`);
+        core.info(
+          `from setup-dotnet file inside if Dotnet_Root: ${process.env['DOTNET_ROOT']}`
+        );
       }
+      DotnetInstallDir.addToPath();
+      core.info(
+        `from setup-dotnet file process.env['DOTNET_INSTALL_DIR']: ${process.env['DOTNET_INSTALL_DIR']}`
+      );
+      core.info(
+        `from setup-dotnet file Dotnet_Root: ${process.env['DOTNET_ROOT']}`
+      );
 
       const workloadsInput = core.getInput('workloads');
       if (workloadsInput) {

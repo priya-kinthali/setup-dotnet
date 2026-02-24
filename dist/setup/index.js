@@ -54912,6 +54912,7 @@ class DotnetInstallDir {
     }
     static setEnvironmentVariable() {
         process.env['DOTNET_INSTALL_DIR'] = DotnetInstallDir.dirPath;
+        core.info(`from installer file inside setEnvironmentVariable process.env['DOTNET_INSTALL_DIR']: ${process.env['DOTNET_INSTALL_DIR']}`);
     }
 }
 exports.DotnetInstallDir = DotnetInstallDir;
@@ -54929,6 +54930,7 @@ class DotnetCoreInstaller {
     architecture;
     static {
         DotnetInstallDir.setEnvironmentVariable();
+        core.info(`from installer file inside setEnvironmentVariable process.env['DOTNET_INSTALL_DIR']: ${process.env['DOTNET_INSTALL_DIR']}`);
     }
     constructor(version, quality, architecture) {
         this.version = version;
@@ -54938,16 +54940,14 @@ class DotnetCoreInstaller {
     async installDotnet() {
         const versionResolver = new DotnetVersionResolver(this.version);
         const dotnetVersion = await versionResolver.createDotnetVersion();
-        const crossArchInstallDir = this.architecture &&
+        const architectureArguments = this.architecture &&
             normalizeArch(this.architecture) !== normalizeArch(os_1.default.arch())
-            ? utils_1.IS_WINDOWS
-                ? [
-                    `-InstallDir "${path_1.default.join(DotnetInstallDir.dirPath, this.architecture)}"`
-                ]
-                : [
-                    '--install-dir',
-                    path_1.default.join(DotnetInstallDir.dirPath, this.architecture)
-                ]
+            ? [
+                utils_1.IS_WINDOWS ? '-InstallDir' : '--install-dir',
+                utils_1.IS_WINDOWS
+                    ? `"${path_1.default.join(DotnetInstallDir.dirPath, this.architecture)}"`
+                    : path_1.default.join(DotnetInstallDir.dirPath, this.architecture)
+            ]
             : [];
         /**
          * Install dotnet runitme first in order to get
@@ -54961,7 +54961,7 @@ class DotnetCoreInstaller {
             .useArguments(utils_1.IS_WINDOWS ? '-Runtime' : '--runtime', 'dotnet')
             // Use latest stable version
             .useArguments(utils_1.IS_WINDOWS ? '-Channel' : '--channel', 'LTS')
-            .useArguments(...crossArchInstallDir)
+            .useArguments(...architectureArguments)
             .execute();
         if (runtimeInstallOutput.exitCode) {
             /**
@@ -54980,7 +54980,7 @@ class DotnetCoreInstaller {
             .useArguments(utils_1.IS_WINDOWS ? '-SkipNonVersionedFiles' : '--skip-non-versioned-files')
             // Use version provided by user
             .useVersion(dotnetVersion, this.quality)
-            .useArguments(...crossArchInstallDir)
+            .useArguments(...architectureArguments)
             .execute();
         if (dotnetInstallOutput.exitCode) {
             throw new Error(`Failed to install dotnet, exit code: ${dotnetInstallOutput.exitCode}. ${dotnetInstallOutput.stderr}`);
@@ -55121,17 +55121,13 @@ async function run() {
             }
             if (architecture &&
                 (0, installer_1.normalizeArch)(architecture) !== (0, installer_1.normalizeArch)(os_1.default.arch())) {
-                const crossArchDir = path_1.default.join(installer_1.DotnetInstallDir.dirPath, architecture);
-                core.addPath(crossArchDir);
-                core.exportVariable('DOTNET_ROOT', crossArchDir);
-                core.info(`process.env['if DOTNET_INSTALL_DIR']: ${process.env['DOTNET_INSTALL_DIR']}`);
-                core.info(`if Dotnet_Root: ${process.env['DOTNET_ROOT']}`);
+                process.env['DOTNET_INSTALL_DIR'] = path_1.default.join(installer_1.DotnetInstallDir.dirPath, architecture);
+                core.info(`process.env['from setup-dotnet file inside if DOTNET_INSTALL_DIR']: ${process.env['DOTNET_INSTALL_DIR']}`);
+                core.info(`from setup-dotnet file inside if Dotnet_Root: ${process.env['DOTNET_ROOT']}`);
             }
-            else {
-                installer_1.DotnetInstallDir.addToPath();
-                core.info(`else process.env['DOTNET_INSTALL_DIR']: ${process.env['DOTNET_INSTALL_DIR']}`);
-                core.info(`else Dotnet_Root: ${process.env['DOTNET_ROOT']}`);
-            }
+            installer_1.DotnetInstallDir.addToPath();
+            core.info(`from setup-dotnet file process.env['DOTNET_INSTALL_DIR']: ${process.env['DOTNET_INSTALL_DIR']}`);
+            core.info(`from setup-dotnet file Dotnet_Root: ${process.env['DOTNET_ROOT']}`);
             const workloadsInput = core.getInput('workloads');
             if (workloadsInput) {
                 const workloads = workloadsInput
