@@ -102,8 +102,16 @@ export async function run() {
         const crossArchDir = path.join(DotnetInstallDir.dirPath, architecture);
         core.addPath(crossArchDir);
         core.exportVariable('DOTNET_ROOT', crossArchDir);
+        core.info(
+          `process.env['if DOTNET_INSTALL_DIR']: ${process.env['DOTNET_INSTALL_DIR']}`
+        );
+        core.info(`if Dotnet_Root: ${process.env['DOTNET_ROOT']}`);
       } else {
         DotnetInstallDir.addToPath();
+        core.info(
+          `else process.env['DOTNET_INSTALL_DIR']: ${process.env['DOTNET_INSTALL_DIR']}`
+        );
+        core.info(`else Dotnet_Root: ${process.env['DOTNET_ROOT']}`);
       }
 
       const workloadsInput = core.getInput('workloads');
