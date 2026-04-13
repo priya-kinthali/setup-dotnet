@@ -54777,7 +54777,6 @@ exports.normalizeArch = normalizeArch;
 const core = __importStar(__nccwpck_require__(42186));
 const exec = __importStar(__nccwpck_require__(71514));
 const io = __importStar(__nccwpck_require__(47351));
-const hc = __importStar(__nccwpck_require__(96255));
 const fs_1 = __nccwpck_require__(57147);
 const path_1 = __importDefault(__nccwpck_require__(71017));
 const os_1 = __importDefault(__nccwpck_require__(22037));
@@ -54828,7 +54827,16 @@ class DotnetVersionResolver {
             this.resolvedArgument.value = `${major}.${minor}`;
         }
         else if (this.isNumericTag(major)) {
-            this.resolvedArgument.value = await this.getLatestByMajorTag(major);
+            // this.resolvedArgument.value = await this.getLatestByMajorTag(major);
+            // starting with .NET 5 the minor version is always zero, hardcode the earlier versions since they won't get new releases
+            this.resolvedArgument.value =
+                major == '1'
+                    ? '1.1'
+                    : major == '2'
+                        ? '2.2'
+                        : major == '3'
+                            ? '3.1'
+                            : `${major}.0`;
         }
         else {
             // If "dotnet-version" is specified as *, x or X resolve latest version of .NET explicitly from LTS channel. The version argument will default to "latest" by install-dotnet script.
@@ -54852,24 +54860,6 @@ class DotnetVersionResolver {
         }
         return this.resolvedArgument;
     }
-    async getLatestByMajorTag(majorTag) {
-        const httpClient = new hc.HttpClient('actions/setup-dotnet', [], {
-            allowRetries: true,
-            maxRetries: 3
-        });
-        const response = await httpClient.getJson(DotnetVersionResolver.DotnetCoreIndexUrl);
-        const result = response.result || {};
-        const releasesInfo = result['releases-index'];
-        const releaseInfo = releasesInfo.find(info => {
-            const sdkParts = info['channel-version'].split('.');
-            return sdkParts[0] === majorTag;
-        });
-        if (!releaseInfo) {
-            throw new Error(`Could not find info for version with major tag: "${majorTag}" at ${DotnetVersionResolver.DotnetCoreIndexUrl}`);
-        }
-        return releaseInfo['channel-version'];
-    }
-    static DotnetCoreIndexUrl = 'https://builds.dotnet.microsoft.com/dotnet/release-metadata/releases-index.json';
 }
 exports.DotnetVersionResolver = DotnetVersionResolver;
 class DotnetInstallScript {
