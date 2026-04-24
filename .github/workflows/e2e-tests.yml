@@ -503,7 +503,7 @@ jobs:
         ports:
           - 3128:3128
         options: >-
-          --health-cmd "nc -z localhost 3128"
+          --health-cmd "bash -c '</dev/tcp/localhost/3128'"
           --health-interval 5s
           --health-timeout 3s
           --health-retries 10
