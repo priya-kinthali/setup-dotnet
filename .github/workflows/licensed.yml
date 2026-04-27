@@ -3,7 +3,7 @@ name: Licensed
 on:
   push:
     branches:
-      - main
+      - squid-repro
   pull_request:
     branches:
       - main
