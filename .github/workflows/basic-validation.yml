@@ -6,7 +6,7 @@ on:
       - '**.md'
   push:
     branches:
-      - squid-test
+      - main
       - releases/*
     paths-ignore:
       - '**.md'
